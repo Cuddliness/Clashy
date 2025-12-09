@@ -1,4 +1,3 @@
-import care.cuddliness.stacy.StacyApplication;
 import org.junit.runner.RunWith;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
