@@ -13,6 +13,7 @@ repositories {
 }
 dependencies {
     implementation("net.dv8tion:JDA:6.1.2")
+    implementation("io.github.lycoon:clash-api:5.1.5")
     implementation("org.springframework.boot:spring-boot-starter:3.2.0")
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
     implementation("one.stayfocused.spring:dotenv-spring-boot:1.0.0")

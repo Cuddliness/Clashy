@@ -69,12 +69,10 @@ public class ClashyCommandHandler {
         List<CommandData> list = new ArrayList<>();
         commandsByName.forEach((s, stacyCommand) -> {
             list.add(stacyCommand.createCommandData());
-            for(Command command : this.jda.retrieveCommands().complete()){
-                commandsById.put(command.getIdLong(), stacyCommand);
-                LOGGER.info("Bound created command {} to ID {}", stacyCommand.name(), command.getIdLong());
-            }
+            commandsById.put(this.jda.retrieveCommands().complete().stream().filter(command -> command.getName().equalsIgnoreCase(stacyCommand.name())).findFirst().get().getIdLong(), stacyCommand);
+                LOGGER.info("Bound created command {}", stacyCommand.name());
 
-        });
+            });
 
         jda.updateCommands().addCommands(list).queue();
     }
@@ -82,6 +80,7 @@ public class ClashyCommandHandler {
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         CompletableFuture.runAsync(() -> {
             ClashyCommandExecutorInterface commandExecutor = this.determineExecutor(event.getCommandIdLong(), event.getSubcommandName(), event.getSubcommandGroup());
+            System.out.println("Determine if command is: " + event.getCommandIdLong());
             if (commandExecutor == null) return;
 
             commandExecutor.onExecute(event.getMember(), event);

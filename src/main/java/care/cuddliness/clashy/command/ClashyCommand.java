@@ -27,6 +27,11 @@ public record ClashyCommand(@NotNull ClashyCommandInterface command, Map<String,
         List<SubcommandData> cmddata = new ArrayList<>();
         List<SubcommandGroupData> subCommandGroups = new ArrayList<>();
         SlashCommandData commandData = Commands.slash(name, name);
+        System.out.println("Adding command options for command:" + name);
+        options.forEach(op -> {
+            System.out.println("Option name: " + op.name());
+            commandData.addOption(op.t(), op.name(), op.descrip(), op.required(), op.auto());
+        });
 
         for (ClashySubCommand subCommand : subCommands.values()) {
             if(subCommandGroups.stream().noneMatch(subcommandGroupData -> subcommandGroupData.getName().equalsIgnoreCase(subCommand.SubCommandGroup()))){

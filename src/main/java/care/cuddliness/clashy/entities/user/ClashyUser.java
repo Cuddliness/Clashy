@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "guildId"})})
+@Table(name = "user")
 public class ClashyUser {
 
 
@@ -15,10 +15,11 @@ public class ClashyUser {
     @Id
     @Getter @Setter private UUID id = UUID.randomUUID();
     @Getter @Setter private Long userId;
-    @Getter @Setter private Integer messageCount = 0;
-    @Getter @Setter private Long guildId;
-    @Getter @Setter private Long applicationId;
+    @Getter @Setter private String playerTag;
 
-    public ClashyUser(Long longId){}
+    public ClashyUser(Long userId, String playerTag){
+        this.userId = userId;
+        this.playerTag = playerTag;
+    }
     public ClashyUser(){}
 }
