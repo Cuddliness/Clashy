@@ -2,6 +2,8 @@ package care.cuddliness.clashy.api;
 
 import care.cuddliness.clashy.api.http.ApiEndpoints;
 import care.cuddliness.clashy.api.http.OkHttpProvider;
+import care.cuddliness.clashy.api.obj.ClashPlayer;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
@@ -44,6 +46,13 @@ public class ClashApi {
         }
     }
 
+    public void refreshToken(){
+        login();
+    }
+
+    public ClashPlayer getClashPlayer(String accountTag){
+        return new Gson().fromJson(getAccount(accountTag), ClashPlayer.class);
+    }
     public JsonObject getAccount(String accountId){
         return  provider.getData(ApiEndpoints.GET_PLAYERS, accountId, TOKEN);
     }

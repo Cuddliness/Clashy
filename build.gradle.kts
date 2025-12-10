@@ -13,8 +13,9 @@ repositories {
 }
 dependencies {
     implementation("net.dv8tion:JDA:6.1.2")
-    implementation("io.github.lycoon:clash-api:5.1.5")
     implementation("org.springframework.boot:spring-boot-starter:3.2.0")
+    implementation("tools.jackson.core:jackson-databind:3.0.3")
+    implementation("com.fasterxml:jackson-xml-databind:0.6.2")
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
     implementation("one.stayfocused.spring:dotenv-spring-boot:1.0.0")
     testImplementation("junit:junit:4.13.2")
