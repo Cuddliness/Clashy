@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.File;
 import java.time.Instant;
 
 public class EmbedUtil {
@@ -42,6 +43,16 @@ public class EmbedUtil {
         return this;
     }
 
+    public EmbedUtil setThumbnail(@NotNull File file){
+        builder.setThumbnail("attachment://" + file.getName().replace(" ", "-"));
+        return this;
+    }
+
+    public EmbedUtil setImage(@NotNull String url){
+        builder.setImage(url);
+        return this;
+    }
+
     public EmbedUtil setColor(EmbedColor color){
         builder.setColor(Color.decode(color.getColor()));
         this.color = color;
@@ -55,6 +66,11 @@ public class EmbedUtil {
 
     public EmbedUtil setTimeStamp(Instant instant){
         builder.setTimestamp(instant);
+        return this;
+    }
+
+    public EmbedUtil addBlankSpace(boolean inline){
+        builder.addBlankField(inline);
         return this;
     }
 
