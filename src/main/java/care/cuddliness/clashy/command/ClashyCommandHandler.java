@@ -80,7 +80,6 @@ public class ClashyCommandHandler {
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         CompletableFuture.runAsync(() -> {
             ClashyCommandExecutorInterface commandExecutor = this.determineExecutor(event.getCommandIdLong(), event.getSubcommandName(), event.getSubcommandGroup());
-            System.out.println("Determine if command is: " + event.getCommandIdLong());
             if (commandExecutor == null) return;
 
             commandExecutor.onExecute(event.getMember(), event);

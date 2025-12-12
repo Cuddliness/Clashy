@@ -9,6 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class ClashyApplication {
 
     public static void main(String[] args) {
+        System.out.println("Hello world");
         ConfigurableApplicationContext clashyApplication = new SpringApplicationBuilder(ClashyApplication.class).web(
                 WebApplicationType.NONE).run(args);
 

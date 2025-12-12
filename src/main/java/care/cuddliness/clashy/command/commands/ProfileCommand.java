@@ -1,4 +1,4 @@
-package care.cuddliness.clashy.commands;
+package care.cuddliness.clashy.command.commands;
 
 import care.cuddliness.clashy.api.ClashApi;
 import care.cuddliness.clashy.api.obj.ClashPlayer;
@@ -33,41 +33,40 @@ public class ProfileCommand implements ClashyCommandInterface {
             ClashyUser user = userRepository.findByUserId(sender.getIdLong());
             if (user == null) {
                 event.reply("You don't have an account linked").setEphemeral(true).queue();
-            } else {
-                ClashApi clashApi = new ClashApi();
-                EmbedUtil embedUtil = new EmbedUtil();
-                ClashPlayer player = clashApi.getClashPlayer(user.getPlayerTag().replace("#", "%23"));
-                embedUtil.setTitle(player.getName().replace("\"", "") + " (`" + player.getTag().toString().replace("\"", "") + "`)" + " lvl `" + player.getExpLevel() + "`");
-                embedUtil.addField("TownHall", "Level: " + player.getTownHallLevel(), false);
-                embedUtil.addField("Clan", player.getClan().getName() + " (`" + player.getClan().getTag().replace("\"", "") + "`) "+ " (" + StringUtils.capitalize(player.getRole()) + ")", false);
-                embedUtil.addField("Clan donations", "Donated: `" + player.getDonations() + "` " + "Donations Received: " + "`" + player.getDonationsReceived() + "`", false);
-                embedUtil.addField(":star: War stars", player.getWarStars() + "", true);
-                embedUtil.addField(":shield: War preference", StringUtils.capitalize(player.getWarPreference()), true);
-                embedUtil.addField("Heroes", prettyHeroes(player), false);
-                embedUtil.addBlankSpace(true);
-                File th = new File(getClass().getClassLoader().getResource("townhall/" + player.getTownHallLevel() + ".png").getFile());
-                embedUtil.setThumbnail(th);
-                event.replyEmbeds(embedUtil.build()).addFiles(FileUpload.fromData(th)).queue();
-
+            }else {
+                printProfile(event, user.getPlayerTag().replace("#", "%23"));
             }
-        } else {
-            String playertag = event.getOption("tag").getAsString().replace("#", "%23");
-            ClashApi clashApi = new ClashApi();
-            EmbedUtil embedUtil = new EmbedUtil();
-            ClashPlayer player = clashApi.getClashPlayer(playertag);
-            embedUtil.setTitle(player.getName().replace("\"", "") + " (`" + player.getTag().toString().replace("\"", "") + "`)" + " lvl `" + player.getExpLevel() + "`");
-            embedUtil.addField("TownHall", "Level: " + player.getTownHallLevel(), false);
-            embedUtil.addField("Clan", player.getClan().getName() + " (`" + player.getClan().getTag().replace("\"", "") + "`) "+ " (" + StringUtils.capitalize(player.getRole()) + ")", false);
-            embedUtil.addField("Clan donations", "Donated: `" + player.getDonations() + "` " + "Donations Received: " + "`" + player.getDonationsReceived() + "`", false);
-            embedUtil.addField(":star: War stars", player.getWarStars() + "", true);
-            embedUtil.addField(":shield: War preference", StringUtils.capitalize(player.getWarPreference()), true);
-            embedUtil.addField("Heroes", prettyHeroes(player), false);
-            embedUtil.addBlankSpace(true);
-            File th = new File(getClass().getClassLoader().getResource("townhall/" + player.getTownHallLevel() + ".png").getFile());
-            embedUtil.setThumbnail(th);
-            event.replyEmbeds(embedUtil.build()).addFiles(FileUpload.fromData(th)).queue();
-
+            }
+            if(event.getOption("member") != null) {
+                ClashyUser mentionedMember = userRepository.findByUserId(event.getOption("member").getAsMember().getIdLong());
+                if(mentionedMember == null) {
+                    event.reply("This member doesn't have their account linked").setEphemeral(true).queue();
+                    return;
+                }
+                printProfile(event, mentionedMember.getPlayerTag());
+            }
+            if(event.getOption("tag") != null) {
+            String playerTag = event.getOption("tag").getAsString().replace("#", "%23");
+            printProfile(event, playerTag);
         }
+    }
+    public void printProfile(SlashCommandInteractionEvent event, String playerTag) {
+        ClashApi clashApi = new ClashApi();
+        EmbedUtil embedUtil = new EmbedUtil();
+        ClashPlayer player = clashApi.getClashPlayer(playerTag);
+        embedUtil.setTitle(player.getName().replace("\"", "") + " (`" + player.getTag().replace("\"", "") + "`)" + " lvl `" + player.getExpLevel() + "`");
+        embedUtil.addField("TownHall", "Level: " + "**" + player.getTownHallLevel() + "**", false);
+        embedUtil.addField("Clan", player.getClan().getName() + " (`" + player.getClan().getTag().replace("\"", "") + "`) "+ " (" + StringUtils.capitalize(player.getRole()) + ")", false);
+        embedUtil.addField("Clan donations", "Donated: `" + player.getDonations() + "` " + "Donations Received: " + "`" + player.getDonationsReceived() + "`", false);
+        embedUtil.addField("Capital Contribution", player.getClanCapitalContributions() + "", false);
+        embedUtil.addField(":star: War stars", player.getWarStars() + "", true);
+        embedUtil.addField(":shield: War preference", StringUtils.capitalize(player.getWarPreference()), true);
+        embedUtil.addField("Heroes", prettyHeroes(player), false);
+        embedUtil.addField("Builderbase", "**" + player.getBuilderHallLevel() + "**", false);
+        embedUtil.addField("Builder Base Trophies", "**" + player.getBuilderBaseTrophies() + "**", false);
+        File th = new File(getClass().getClassLoader().getResource("townhall/" + player.getTownHallLevel() + ".png").getFile());
+        embedUtil.setThumbnail(th);
+        event.replyEmbeds(embedUtil.build()).addFiles(FileUpload.fromData(th)).queue();
     }
     private String prettyHeroes(ClashPlayer player){
         StringBuilder stringBuilder = new StringBuilder();
@@ -85,8 +84,6 @@ public class ProfileCommand implements ClashyCommandInterface {
         }
         return stringBuilder.toString();
     }
-
-
     @NotNull
     private static Map<String, String> getStringStringMap() {
         String babarianKinkEmoji = "<:BabarianKing:1448331341266681907>";

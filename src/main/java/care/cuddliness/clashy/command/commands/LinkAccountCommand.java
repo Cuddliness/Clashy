@@ -1,4 +1,4 @@
-package care.cuddliness.clashy.commands;
+package care.cuddliness.clashy.command.commands;
 
 import care.cuddliness.clashy.api.ClashApi;
 import care.cuddliness.clashy.command.annotation.ClashyCommandComponent;

@@ -49,7 +49,6 @@ public class ClashApi {
     public void refreshToken(){
         login();
     }
-
     public ClashPlayer getClashPlayer(String accountTag){
         return new Gson().fromJson(getAccount(accountTag), ClashPlayer.class);
     }

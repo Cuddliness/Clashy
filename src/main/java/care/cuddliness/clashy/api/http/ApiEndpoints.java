@@ -8,7 +8,6 @@ public class ApiEndpoints {
     public static final String GET_BUILDERBASE_LEAGUES = "/builderbaseleagues/";
     public static final String GET_WAR_LEAGUES = "/warleagues/";
     public static final String GET_LOCATIONS = "/locations/";
-
-
+    public static final String GOLDPASS_INFO = "/goldpass/seasons/current";
 
 }

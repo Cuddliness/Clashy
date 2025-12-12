@@ -11,17 +11,14 @@ public record ClashyCommand(@NotNull ClashyCommandInterface command, Map<String,
 
     public static @NotNull Map<String, ClashySubCommand> computeSubCommands(@NotNull Collection<ClashySubCommand> subCommands) {
         Map<String, ClashySubCommand> map = new HashMap<>();
-
         for (ClashySubCommand subCommand : subCommands) {
             if (!subCommand.subCommandId().isEmpty())
                 map.put(subCommand.SubCommandGroup() + "/" + subCommand.subCommandId(), subCommand);
             else
                 map.put(subCommand.subCommandId(), subCommand);
         }
-
         return map;
     }
-
     public CommandData createCommandData() {
         Map<String, ClashySubCommand> map = new HashMap<>();
         List<SubcommandData> cmddata = new ArrayList<>();
@@ -29,7 +26,6 @@ public record ClashyCommand(@NotNull ClashyCommandInterface command, Map<String,
         SlashCommandData commandData = Commands.slash(name, name);
         System.out.println("Adding command options for command:" + name);
         options.forEach(op -> {
-            System.out.println("Option name: " + op.name());
             commandData.addOption(op.t(), op.name(), op.descrip(), op.required(), op.auto());
         });
 
@@ -41,7 +37,6 @@ public record ClashyCommand(@NotNull ClashyCommandInterface command, Map<String,
             }
 
             SubcommandData data = new SubcommandData(subCommand.subCommandId(), "HII");
-
             for(SubcommandGroupData groupData : subCommandGroups){
                 if(groupData.getName().equalsIgnoreCase(subCommand.SubCommandGroup())){
                     groupData.addSubcommands(data);
@@ -53,7 +48,6 @@ public record ClashyCommand(@NotNull ClashyCommandInterface command, Map<String,
                 cmddata.add(data);
             }
             map.putIfAbsent(subCommand.subCommandId(), subCommand);
-
         }
         commandData.addSubcommandGroups(subCommandGroups);
         commandData.addSubcommands(cmddata);

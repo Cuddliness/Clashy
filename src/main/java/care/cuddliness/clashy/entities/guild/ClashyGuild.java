@@ -13,7 +13,7 @@ public class ClashyGuild {
     @Setter
     @Id
     private Long id;
-    public String naughtyWords;
+    private String clanTag;
     public ClashyGuild(){
 
     }
