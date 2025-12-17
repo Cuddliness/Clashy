@@ -1,7 +1,6 @@
-package care.cuddliness.clashy.api.obj;
+package care.cuddliness.clashy.api.obj.player;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class BadgeUrls {

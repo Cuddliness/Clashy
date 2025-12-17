@@ -1,7 +1,7 @@
-package care.cuddliness.clashy.api.obj;
+package care.cuddliness.clashy.api.obj.player;
 
-import care.cuddliness.clashy.api.obj.hero.Hero;
-import care.cuddliness.clashy.api.obj.troop.Troop;
+import care.cuddliness.clashy.api.obj.player.hero.Hero;
+import care.cuddliness.clashy.api.obj.player.troop.Troop;
 import lombok.Data;
 
 import java.util.List;

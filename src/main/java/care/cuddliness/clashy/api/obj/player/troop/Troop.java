@@ -1,4 +1,4 @@
-package care.cuddliness.clashy.api.obj.troop;
+package care.cuddliness.clashy.api.obj.player.troop;
 
 import lombok.Data;
 

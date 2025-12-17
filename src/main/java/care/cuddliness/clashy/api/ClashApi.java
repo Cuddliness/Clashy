@@ -2,7 +2,8 @@ package care.cuddliness.clashy.api;
 
 import care.cuddliness.clashy.api.http.ApiEndpoints;
 import care.cuddliness.clashy.api.http.OkHttpProvider;
-import care.cuddliness.clashy.api.obj.ClashPlayer;
+import care.cuddliness.clashy.api.obj.clan.ClashClan;
+import care.cuddliness.clashy.api.obj.player.ClashPlayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -33,7 +34,6 @@ public class ClashApi {
                     throw new IOException("Unexpected HTTP code " + response.code()
                             + " (" + response.message() + ")");
                 }
-
                 // response.body().string() consumes the stream once, so store it first
                 String responsebody = response.body().string();
                 System.out.println("Response body: " + body);
@@ -49,13 +49,22 @@ public class ClashApi {
     public void refreshToken(){
         login();
     }
+
+    //Get clash of clans player data
     public ClashPlayer getClashPlayer(String accountTag){
         return new Gson().fromJson(getAccount(accountTag), ClashPlayer.class);
     }
     public JsonObject getAccount(String accountId){
         return  provider.getData(ApiEndpoints.GET_PLAYERS, accountId, TOKEN);
     }
+    private JsonObject getClanJson(String accountId){
+        return  provider.getData(ApiEndpoints.GET_CLANS, accountId.replace("#", "%23"), TOKEN);
+    }
     public boolean linkAccount(String accountId, String accountToken){
         return  provider.linkAccount(accountId, accountToken, TOKEN);
     }
+    public ClashClan getClan(String clanId){
+        return new Gson().fromJson(getClanJson(clanId), ClashClan.class);
+    }
+
 }

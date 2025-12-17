@@ -1,14 +1,17 @@
 package care.cuddliness.clashy.command.commands;
 
 import care.cuddliness.clashy.api.ClashApi;
-import care.cuddliness.clashy.api.obj.ClashPlayer;
-import care.cuddliness.clashy.api.obj.hero.Hero;
+import care.cuddliness.clashy.api.obj.player.ClashPlayer;
+import care.cuddliness.clashy.api.obj.player.hero.Hero;
 import care.cuddliness.clashy.command.annotation.ClashyCommandComponent;
 import care.cuddliness.clashy.command.annotation.ClashyCommandOption;
 import care.cuddliness.clashy.command.data.ClashyCommandInterface;
 import care.cuddliness.clashy.entities.user.ClashyUser;
 import care.cuddliness.clashy.repositories.ClashUserRepository;
 import care.cuddliness.clashy.utils.EmbedUtil;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
+import net.dv8tion.jda.api.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -16,9 +19,7 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 @ClashyCommandComponent(name = "profile")
@@ -66,7 +67,7 @@ public class ProfileCommand implements ClashyCommandInterface {
         embedUtil.addField("Builder Base Trophies", "**" + player.getBuilderBaseTrophies() + "**", false);
         File th = new File(getClass().getClassLoader().getResource("townhall/" + player.getTownHallLevel() + ".png").getFile());
         embedUtil.setThumbnail(th);
-        event.replyEmbeds(embedUtil.build()).addFiles(FileUpload.fromData(th)).queue();
+        event.replyEmbeds(embedUtil.build()).addFiles(FileUpload.fromData(th)).addComponents(ActionRow.of(Button.of(ButtonStyle.SUCCESS, "show_clan", "\uD83D\uDEE1\uFE0F Show clan"))).queue();
     }
     private String prettyHeroes(ClashPlayer player){
         StringBuilder stringBuilder = new StringBuilder();
