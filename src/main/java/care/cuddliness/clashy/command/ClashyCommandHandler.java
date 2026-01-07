@@ -69,7 +69,7 @@ public class ClashyCommandHandler {
         List<CommandData> list = new ArrayList<>();
         commandsByName.forEach((s, stacyCommand) -> {
             list.add(stacyCommand.createCommandData());
-            commandsById.put(this.jda.retrieveCommands().complete().stream().filter(command -> command.getName().equalsIgnoreCase(stacyCommand.name())).findFirst().get().getIdLong(), stacyCommand);
+            commandsById.put(this.jda.retrieveCommands().complete().stream().filter(command -> command.getName().equalsIgnoreCase(stacyCommand.name())).findAny().get().getIdLong(), stacyCommand);
                 LOGGER.info("Bound created command {}", stacyCommand.name());
 
             });
