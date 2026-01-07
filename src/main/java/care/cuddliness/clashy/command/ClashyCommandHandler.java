@@ -34,11 +34,8 @@ public class ClashyCommandHandler {
 
     public ClashyCommandHandler(@NotNull ApplicationContext applicationContext, @NotNull JDA jda, @Nullable Guild guild) {
         this.jda = jda;
-        ClashyCommandFileHandler commandFileHandler = new ClashyCommandFileHandler();
-
         Map<Class<? extends ClashyCommandInterface>, Set<ClashySubCommand>> subCommandReferences = new HashMap<>();
         for (ClashySubCommandInterface subCommand : applicationContext.getBeansOfType(ClashySubCommandInterface.class).values()) {
-
             ClashySubCommandComponent subCommandComponent = subCommand.getClass().getAnnotation(ClashySubCommandComponent.class);
 
             ClashyCommandOption[] options = subCommand.getClass().getAnnotationsByType(ClashyCommandOption.class);
@@ -67,14 +64,21 @@ public class ClashyCommandHandler {
 
     public void init() {
         List<CommandData> list = new ArrayList<>();
-        commandsByName.forEach((s, stacyCommand) -> {
-            list.add(stacyCommand.createCommandData());
-            commandsById.put(this.jda.retrieveCommands().complete().stream().filter(command -> command.getName().equalsIgnoreCase(stacyCommand.name())).findAny().get().getIdLong(), stacyCommand);
-                LOGGER.info("Bound created command {}", stacyCommand.name());
+        commandsByName.forEach((name, command) -> {
+            list.add(command.createCommandData());
+        });
 
-            });
-
-        jda.updateCommands().addCommands(list).queue();
+        jda.updateCommands()
+                .addCommands(list)
+                .queue(updatedCommands -> {
+                    for (Command command : updatedCommands) {
+                        ClashyCommand cl = commandsByName.get(command.getName());
+                        if (cl != null) {
+                            commandsById.put(command.getIdLong(), cl);
+                            LOGGER.info("Bound command {} to ID {}", command.getName(), command.getIdLong());
+                        }
+                    }
+                });
     }
         @EventListener(SlashCommandInteractionEvent.class)
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
